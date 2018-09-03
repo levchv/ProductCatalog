@@ -64,7 +64,7 @@ namespace ProductCatalog.Domain.Products.Adapters.Commands
 			if (product == null)
 				return EUpdateProductCommandStatus.ProductNotExists;
 
-			var isCodeUnique = await repository.CheckIfProductCodeUniqueAsync(productChanges.Code);
+			var isCodeUnique = await repository.CheckIfProductCodeUniqueAsync(id, productChanges.Code);
 			if (!isCodeUnique)
 				return EUpdateProductCommandStatus.FailsBecauseDuplicatedCode;
 

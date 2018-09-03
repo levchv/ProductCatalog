@@ -7,5 +7,6 @@ namespace ProductCatalog.Domain.Products.Ports.Driven
 	public interface IProductRepository : ISimpleRepository<Product, string>
 	{
 		Task<bool> CheckIfProductCodeUniqueAsync(string code);
+		Task<bool> CheckIfProductCodeUniqueAsync(string id, string code);
 	}
 }

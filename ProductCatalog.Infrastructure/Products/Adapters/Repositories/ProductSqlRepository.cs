@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Domain.Core.Ports.Repositories;
 using ProductCatalog.Domain.Products.Entities;
 using ProductCatalog.Domain.Products.Ports.Driven;
@@ -7,7 +9,7 @@ using ProductCatalog.Infrastructure.Products.DbClients;
 
 namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 {
-    public class ProductSqlRepository: IProductRepository
+    internal class ProductSqlRepository: IProductRepository
     {
         private ProductSqlDbClient repository;
 
@@ -27,14 +29,25 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 			repository.Add(product);
 		}
 
-		public Task<bool> CheckIfProductCodeUniqueAsync(string code)
+		public async Task<bool> CheckIfProductCodeUniqueAsync(string id, string code)
 		{
-			throw new NotImplementedException();
+			if (!int.TryParse(id, out var intId))
+				throw new ArgumentException("Id should be integer number");
+
+			return await this.repository.Products.FirstOrDefaultAsync(i => i.Id != intId && i.Code == code) == null;
+		}
+
+		public async Task<bool> CheckIfProductCodeUniqueAsync(string code)
+		{
+			return await this.repository.Products.FirstOrDefaultAsync(i => i.Code == code) == null;
 		}
 
 		public async Task<bool> DeleteAsync(string id)
 		{
-			var product = await repository.FindAsync<DbClients.SqlModels.Product>(id);
+			if (!int.TryParse(id, out var intId))
+				throw new ArgumentException("Id should be integer number");
+
+			var product = await repository.FindAsync<DbClients.SqlModels.Product>(intId);
 			if (product == null)
 				return false;
 
@@ -44,13 +57,19 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 
 		public async Task<Product> GetAsync(string id)
 		{
-			var product = await repository.FindAsync<DbClients.SqlModels.Product>(id);
+			if (!int.TryParse(id, out var intId))
+				throw new ArgumentException("Id should be integer number");
+
+			var product = await repository.FindAsync<DbClients.SqlModels.Product>(intId);
 			return new Product(product.Id.ToString(), product.Code, product.Name, product.Price, product.Photo);
 		}
 
 		public async Task UpdateAsync(Product item)
 		{
-			var product = await repository.FindAsync<DbClients.SqlModels.Product>(item.GetId());
+			if (!int.TryParse(item.GetId(), out var intId))
+				throw new ArgumentException("Id should be integer number");
+
+			var product = await repository.FindAsync<DbClients.SqlModels.Product>(intId);
 			product.Code = item.GetCode();
 			product.Name = item.GetName();
 			product.Price = item.GetPrice();

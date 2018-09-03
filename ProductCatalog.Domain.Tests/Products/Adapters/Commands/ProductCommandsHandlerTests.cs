@@ -214,7 +214,7 @@ namespace ProductCatalog.Domain.Tests.Products.Adapters.Commands
 
 			var repositoryMock = new Mock<IProductRepository>();
 			repositoryMock.Setup(repository => repository.GetAsync(id)).ReturnsAsync(productEntity);
-			repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(product.Code)).ReturnsAsync(false);
+			repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(id, product.Code)).ReturnsAsync(false);
 
 			var repositoryFactoryMock =  new Mock<IProductRepositoryFactory>();
 			repositoryFactoryMock.Setup(factory => factory.Get()).Returns(repositoryMock.Object);
@@ -233,7 +233,7 @@ namespace ProductCatalog.Domain.Tests.Products.Adapters.Commands
 			var productEntity = GetProductEntity(id, product);
 
             var repositoryMock = new Mock<IProductRepository>();
-            repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(product.Code)).ReturnsAsync(true);
+            repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(id, product.Code)).ReturnsAsync(true);
             repositoryMock.Setup(repository => repository.GetAsync(id)).ReturnsAsync(productEntity);
             repositoryMock.Setup(repository => repository.UnitOfWork).Returns(GetUnitOfWork());
 
@@ -269,7 +269,7 @@ namespace ProductCatalog.Domain.Tests.Products.Adapters.Commands
 
 			var repositoryMock = new Mock<IProductRepository>();
 			repositoryMock.Setup(repository => repository.GetAsync(id)).ReturnsAsync(productEntity);
-			repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(product.Code)).ReturnsAsync(true);
+			repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(id, product.Code)).ReturnsAsync(true);
 
 			var repositoryFactoryMock = new Mock<IProductRepositoryFactory>();
 			repositoryFactoryMock.Setup(factory => factory.Get()).Returns(repositoryMock.Object);
@@ -288,7 +288,7 @@ namespace ProductCatalog.Domain.Tests.Products.Adapters.Commands
             var exception = new Exception();
 
 			var repositoryMock = new Mock<IProductRepository>();
-            repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(product.Code)).ReturnsAsync(true);
+            repositoryMock.Setup(repository => repository.CheckIfProductCodeUniqueAsync(id, product.Code)).ReturnsAsync(true);
             repositoryMock.Setup(repository => repository.GetAsync(id)).ReturnsAsync(productEntity);
             repositoryMock.Setup(repository => repository.UpdateAsync(productEntity)).Throws(exception);
 

@@ -8,7 +8,7 @@ using ProductCatalog.Infrastructure.Products.DbClients;
 
 namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 {
-    public class ProductReadOnlySqlRepository: IProductReadOnlyRepository
+    internal class ProductReadOnlySqlRepository: IProductReadOnlyRepository
     {
         private ProductSqlDbClient repository;
 
