@@ -1,7 +1,7 @@
 using System;
 using ProductCatalog.Domain.Core.DataModels;
 
-namespace ProductCatalog.Domain.Products.Ports.Driving.Queries.ViewModels
+namespace ProductCatalog.Domain.Products.ViewModels
 {
     public sealed class ProductViewModel: IViewModel
     {

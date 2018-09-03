@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using ProductCatalog.Domain.Core.DataModels;
-using ProductCatalog.Domain.Products.Ports.Driving.Queries.ViewModels;
+using ProductCatalog.Domain.Products.ViewModels;
 
 namespace ProductCatalog.Domain.Tests.Products.ViewModels
 {

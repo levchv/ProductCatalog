@@ -1,4 +1,4 @@
-namespace ProductCatalog.Domain.Products.Ports.Driving.Commands.Statuses
+namespace ProductCatalog.Domain.Products.Statuses
 {
     public enum EUpdateProductCommandStatus
     {

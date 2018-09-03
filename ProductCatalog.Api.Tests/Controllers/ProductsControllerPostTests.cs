@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using ProductCatalog.Api.Controllers;
-using ProductCatalog.Domain.Core.Ports.Driving.Commands;
-using ProductCatalog.Domain.Core.Ports.Driving.Queries;
-using ProductCatalog.Domain.Products.Ports.Driving.Commands.InputModels;
+using ProductCatalog.Domain.Products.InputModels;
+using ProductCatalog.Domain.Products.Ports.Driving;
 
 namespace ProductCatalog.Api.Tests.Controllers
 {
@@ -18,8 +17,8 @@ namespace ProductCatalog.Api.Tests.Controllers
 		{
 			var product = GetProductInputModel();
 			var commandHandlerMock = new Mock<IProductCommandsHandler>();
-			string outId = null;
-			commandHandlerMock.Setup(handler => handler.CreateAsync(product, out outId)).ReturnsAsync(possibleCommandResult);
+			//string outId = null;
+			commandHandlerMock.Setup(handler => handler.CreateAsync(product)).ReturnsAsync(possibleCommandResult);
 
 			var productController = new ProductsController(commandHandlerMock.Object, GetProductQueriesHandler(), null);
 			productController.ModelState.AddModelError("test", "test");
@@ -33,16 +32,16 @@ namespace ProductCatalog.Api.Tests.Controllers
 		{
 			var product = GetProductInputModel();
 			var commandHandlerMock = new Mock<IProductCommandsHandler>();
-			string outId = "52";
-			commandHandlerMock.Setup(handler => handler.CreateAsync(product, out outId)).ReturnsAsync(true);
+			//string outId = "52";
+			commandHandlerMock.Setup(handler => handler.CreateAsync(product)).ReturnsAsync(true);
 
 			var productController = new ProductsController(commandHandlerMock.Object, GetProductQueriesHandler(), null);
 			productController.ModelState.Clear();
 			var result = await productController.PostAsync(product);
 
-			Assert.IsInstanceOf<ObjectResult>(result);			
-			Assert.AreEqual(201, ((ObjectResult)result).StatusCode);
-			Assert.AreEqual(outId, ((ObjectResult)result).Value);
+			Assert.IsInstanceOf<StatusCodeResult>(result);			
+			Assert.AreEqual(201, ((StatusCodeResult)result).StatusCode);
+			//Assert.AreEqual(outId, ((ObjectResult)result).Value);
 		}
 
 		[Test]
@@ -50,8 +49,8 @@ namespace ProductCatalog.Api.Tests.Controllers
 		{
 			var product = GetProductInputModel();
 			var commandHandlerMock = new Mock<IProductCommandsHandler>();
-			string outId = null;
-			commandHandlerMock.Setup(handler => handler.CreateAsync(product, out outId)).ReturnsAsync(false);
+			//string outId = null;
+			commandHandlerMock.Setup(handler => handler.CreateAsync(product)).ReturnsAsync(false);
 
 			var productController = new ProductsController(commandHandlerMock.Object, GetProductQueriesHandler(), null);
 			productController.ModelState.Clear();
@@ -66,8 +65,8 @@ namespace ProductCatalog.Api.Tests.Controllers
 		{
 			var product = GetProductInputModel();
 			var commandHandlerMock = new Mock<IProductCommandsHandler>();
-			string outId = null;
-			commandHandlerMock.Setup(handler => handler.CreateAsync(product, out outId)).ThrowsAsync(new Exception());
+			//string outId = null;
+			commandHandlerMock.Setup(handler => handler.CreateAsync(product)).ThrowsAsync(new Exception());
 
 			var productController = new ProductsController(commandHandlerMock.Object, GetProductQueriesHandler(), null);
 			productController.ModelState.Clear();

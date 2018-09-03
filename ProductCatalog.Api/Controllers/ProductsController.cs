@@ -1,11 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProductCatalog.Domain.Core.Ports.Driving.Commands;
-using ProductCatalog.Domain.Core.Ports.Driving.Queries;
 using ProductCatalog.Domain.Core.Ports.Shared;
-using ProductCatalog.Domain.Products.Ports.Driving.Commands.InputModels;
-using ProductCatalog.Domain.Products.Ports.Driving.Commands.Statuses;
+using ProductCatalog.Domain.Products.InputModels;
+using ProductCatalog.Domain.Products.Ports.Driving;
+using ProductCatalog.Domain.Products.Statuses;
 
 namespace ProductCatalog.Api.Controllers
 {
@@ -72,8 +71,8 @@ namespace ProductCatalog.Api.Controllers
 				if (!ModelState.IsValid)
 					return BadRequest();
 
-				return await productCommandsHandler.CreateAsync(value, out var id) 
-					? (IActionResult)StatusCode(201, id) 
+				return await productCommandsHandler.CreateAsync(value) 
+					? (IActionResult)StatusCode(201) 
 					: BadRequest(true);
 			}
 			catch (Exception exp)

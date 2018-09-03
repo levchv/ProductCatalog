@@ -4,10 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using ProductCatalog.Api.Controllers;
-using ProductCatalog.Domain.Core.Ports.Driving.Commands;
-using ProductCatalog.Domain.Core.Ports.Driving.Queries;
-using ProductCatalog.Domain.Products.Ports.Driving.Commands.InputModels;
-using ProductCatalog.Domain.Products.Ports.Driving.Commands.Statuses;
+using ProductCatalog.Domain.Products.InputModels;
+using ProductCatalog.Domain.Products.Ports.Driving;
+using ProductCatalog.Domain.Products.Statuses;
 
 namespace ProductCatalog.Api.Tests.Controllers
 {

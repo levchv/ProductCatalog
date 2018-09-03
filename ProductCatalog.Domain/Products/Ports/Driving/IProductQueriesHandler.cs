@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using ProductCatalog.Domain.Products.Ports.Driving.Queries.ViewModels;
+using ProductCatalog.Domain.Products.ViewModels;
 
-namespace ProductCatalog.Domain.Core.Ports.Driving.Queries
+namespace ProductCatalog.Domain.Products.Ports.Driving
 {
 	public interface IProductQueriesHandler
 	{
