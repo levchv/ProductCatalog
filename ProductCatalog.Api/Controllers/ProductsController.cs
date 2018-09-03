@@ -95,7 +95,7 @@ namespace ProductCatalog.Api.Controllers
 				{
 					case EUpdateProductCommandStatus.Success:
 						return Ok();
-					case EUpdateProductCommandStatus.TargetNotExists:
+					case EUpdateProductCommandStatus.ProductNotExists:
 						return NotFound();
 					case EUpdateProductCommandStatus.FailsBecauseDuplicatedCode:
 						return BadRequest((int)result);

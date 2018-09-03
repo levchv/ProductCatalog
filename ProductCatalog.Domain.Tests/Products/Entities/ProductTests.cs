@@ -39,6 +39,8 @@ namespace ProductCatalog.Domain.Tests.Products.Entities
 		[TestCase("code", null, 100.0, "http://asd.sdf.com/asd.jpg")]
 		[TestCase("code", "name", 0, "http://asd.sdf.com/asd.jpg")]
 		[TestCase("code", "name", -100.0, "http://asd.sdf.com/asd.jpg")]
+		[TestCase("code", "name", 100.0, "asd.34")]
+		[TestCase("code", "name", 100.0, "D:\\asd\\sas.jpg")]
 		public void ClassCouldNotBeConstructNewWithNotValidData(string code, string name, double price, string photo)
 		{
 			Assert.Throws<ArgumentException>(() => new Product(code, name, price, photo));
@@ -52,6 +54,8 @@ namespace ProductCatalog.Domain.Tests.Products.Entities
 		[TestCase("1", "code", "name", -100.0, "http://asd.sdf.com/asd.jpg")]
 		[TestCase("", "code", "name", 100.0, "http://asd.sdf.com/asd.jpg")]
 		[TestCase(null, "code", "name", 100.0, "http://asd.sdf.com/asd.jpg")]
+		[TestCase("1", "code", "name", 100.0, "asd.34")]
+		[TestCase("1", "code", "name", 100.0, "D:\\asd\\sas.jpg")]
 		public void ClassCouldNotBeConstructExistingWithNotValidData(string id, string code, string name, double price, string photo)
 		{
 			Assert.Throws<ArgumentException>(() => new Product(id, code, name, price, photo));

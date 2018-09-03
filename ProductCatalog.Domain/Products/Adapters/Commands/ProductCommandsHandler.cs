@@ -38,8 +38,8 @@ namespace ProductCatalog.Domain.Products.Adapters.Commands
 
 		public async Task<bool> DeleteAsync(string id)
 		{
-			if (id == null)
-				throw new ArgumentNullException(nameof(id));
+			if (string.IsNullOrEmpty(id))
+				throw new ArgumentException("Is empty", nameof(id));
 
 			var repository = repositoryFactory.Get();
 
@@ -52,17 +52,17 @@ namespace ProductCatalog.Domain.Products.Adapters.Commands
 		}
 
 		public async Task<EUpdateProductCommandStatus> UpdateAsync(string id, ProductInputModel productChanges)
-		{
-			if (id == null)
-				throw new ArgumentNullException(nameof(id));
-			if (productChanges == null)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException("Is empty", nameof(id));
+            if (productChanges == null)
 				throw new ArgumentNullException(nameof(productChanges));
 
 			var repository = repositoryFactory.Get();
 			
 			var product = await repository.GetAsync(id);
 			if (product == null)
-				return EUpdateProductCommandStatus.TargetNotExists;
+				return EUpdateProductCommandStatus.ProductNotExists;
 
 			var isCodeUnique = await repository.CheckIfProductCodeUniqueAsync(productChanges.Code);
 			if (!isCodeUnique)
@@ -73,7 +73,7 @@ namespace ProductCatalog.Domain.Products.Adapters.Commands
 			product.SetPhoto(productChanges.Photo);
 			product.SetPrice(productChanges.Price);
 			
-			repository.UpdateAsync(product);
+			await repository.UpdateAsync(product);
 			await repository.UnitOfWork.SaveChangesAsync();
 
 			return EUpdateProductCommandStatus.Success;

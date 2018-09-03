@@ -13,7 +13,7 @@ namespace ProductCatalog.Api.Tests.Controllers
     public class ProductsControllerPutTests
     {            
 		[TestCase("25", EUpdateProductCommandStatus.Success)]
-		[TestCase("25", EUpdateProductCommandStatus.TargetNotExists)]
+		[TestCase("25", EUpdateProductCommandStatus.ProductNotExists)]
 		[TestCase("25", EUpdateProductCommandStatus.FailsBecauseDuplicatedCode)]
         public async Task Put_NotValidModel_ReturnsBadRequestResult(string id, EUpdateProductCommandStatus possibleCommandResult)
 		{
@@ -47,7 +47,7 @@ namespace ProductCatalog.Api.Tests.Controllers
 		{
 			var product = GetProductInputModel();
 			var commandHandlerMock = new Mock<IProductCommandsHandler>();
-			commandHandlerMock.Setup(handler => handler.UpdateAsync(id, product)).ReturnsAsync(EUpdateProductCommandStatus.TargetNotExists);
+			commandHandlerMock.Setup(handler => handler.UpdateAsync(id, product)).ReturnsAsync(EUpdateProductCommandStatus.ProductNotExists);
 
 			var productController = new ProductsController(commandHandlerMock.Object, GetProductQueriesHandler(), null);
 			productController.ModelState.Clear();
