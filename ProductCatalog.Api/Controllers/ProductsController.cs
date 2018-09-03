@@ -26,7 +26,7 @@ namespace ProductCatalog.Api.Controllers
 		     
         [HttpGet]
  		[FormatFilter]
-        public async Task<IActionResult> GetItemsAsync(string search)
+        public async Task<IActionResult> GetItemsAsync(string search, string format)
         {
 			try
 			{
