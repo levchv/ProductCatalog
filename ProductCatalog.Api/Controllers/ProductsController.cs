@@ -11,7 +11,6 @@ namespace ProductCatalog.Api.Controllers
 	[ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-	[FormatFilter]
     public class ProductsController: ControllerBase
     {        
 		private IProductCommandsHandler productCommandsHandler;
@@ -24,11 +23,9 @@ namespace ProductCatalog.Api.Controllers
 			this.productQueriesHandler = productQueriesHandler ?? throw new ArgumentNullException(nameof(productQueriesHandler));
 			this.logger = logger;
 		}
-
-		
- 		//[Route("[controller]/[action]/{id}.{format?}")]
-        
+		     
         [HttpGet]
+ 		[FormatFilter]
         public async Task<IActionResult> GetItemsAsync(string search)
         {
 			try

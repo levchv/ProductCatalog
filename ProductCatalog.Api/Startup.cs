@@ -16,6 +16,7 @@ using ProductCatalog.Domain.Products.Adapters.Commands;
 using ProductCatalog.Domain.Products.Adapters.Queries;
 using ProductCatalog.Domain.Products.Ports.Driving;
 using ProductCatalog.Infrastructure.Products.Adapters.Factories;
+using ProductCatalog.Infrastructure.Products.Adapters.Formatters;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace ProductCatalog.Api
@@ -32,7 +33,12 @@ namespace ProductCatalog.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options => 
+			{
+				var formattersFactory = new ProductFormattersFactory();
+				options.OutputFormatters.Add(formattersFactory.GetCsvOutputFormatter());
+                options.FormatterMappings.SetMediaTypeMappingForFormat("csv", "text/csv");
+			}).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 			var configuration = Configuration.GetSection("Database").Get<DatabaseConfiguration>();
 			var productRepositoryFactory = new ProductRepositoryFactory(configuration.ConnectionString);			
