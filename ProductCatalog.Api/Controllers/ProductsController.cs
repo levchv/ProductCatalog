@@ -8,7 +8,8 @@ using ProductCatalog.Domain.Products.Statuses;
 
 namespace ProductCatalog.Api.Controllers
 {
-    [Route("api/[controller]")]
+	[ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
 	[FormatFilter]
     public class ProductsController: ControllerBase
