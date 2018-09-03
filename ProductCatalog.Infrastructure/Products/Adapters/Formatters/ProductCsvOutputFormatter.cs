@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -46,11 +48,33 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Formatters
 			else
 			{
 				AppendLine(buffer, context.Object as ProductViewModel);
-			}
-			return response.WriteAsync(buffer.ToString());
+            }
+
+            var fileName = GetFileName(context.HttpContext.Request);
+            var cd = new ContentDisposition
+            {
+                FileName = fileName,
+                Inline = false
+            };
+            response.Headers.Add("Content-Disposition", cd.ToString());
+
+            return response.WriteAsync(buffer.ToString());
 		}
 
-		private void AppendLine(StringBuilder buffer, ProductViewModel product)
+        private string GetFileName(HttpRequest request)
+        {
+            var searchParams = request.Query.ContainsKey("search") ? request.Query["search"].ToString() : null;
+            if (!string.IsNullOrEmpty(searchParams))
+            {
+                var regexSearch = Path.GetInvalidFileNameChars().ToString();
+                var r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                var searchSafeParams = r.Replace(searchParams, "");
+                return $"Products({searchSafeParams}).csv";
+            }
+            return "Products.csv";
+        }
+
+        private void AppendLine(StringBuilder buffer, ProductViewModel product)
 		{
 			if (product == null) 
 			{
