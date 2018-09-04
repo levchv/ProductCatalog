@@ -1,0 +1,77 @@
+﻿@model ProductCatalog.WebClient.Models.ProductsViewModel
+
+@{
+    ViewData["Title"] = "Product Catalog";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+  <a asp-action="Create">Create New</a>
+</p>
+<p>
+
+  <form asp-action="Search">
+    <div class="form-group">
+      <input asp-for="Search" class="form-control" />
+    </div>
+    <div class="form-group">
+      <input type="submit" value="Search" formaction="/Products/Search" class="btn btn-default" />
+      <input type="submit" value="Clear" formaction="/Products/Index" class="btn btn-secondary" />
+      <a target="_blank" href="@Model.ExcelLink"  class="btn btn-primary pull-right">Excel</a>
+    </div>
+  </form>
+</p>
+<table class="table">
+  <thead>
+    <tr>
+      @{ ProductCatalog.WebClient.Models.ProductViewModel productModel = null;
+        <th>
+          @Html.DisplayNameFor(model => productModel.Code)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => productModel.Name)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => productModel.Price)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => productModel.Photo)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => productModel.LastUpdated)
+        </th>
+        <th></th>
+        }
+      </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model.Products)
+    {
+      <tr>
+        <td>
+          @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+          @if (!string.IsNullOrEmpty(item.Photo)) {
+              <img src="@Url.Content(item.Photo)" alt="@item.Name" class="img-thumbnail product-image" />
+           }
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.LastUpdated)
+        </td>
+        <td>
+          <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+          <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+          <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
