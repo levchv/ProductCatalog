@@ -47,8 +47,8 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 			if (!int.TryParse(id, out var intId))
 				throw new ArgumentException("Id should be integer number");
 
-			var product = await repository.FindAsync<DbClients.SqlModels.Product>(intId);
-			if (product == null)
+            var product = await repository.Products.FirstOrDefaultAsync(i => i.Id == intId);
+            if (product == null)
 				return false;
 
 			repository.Remove(product);
@@ -60,8 +60,11 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 			if (!int.TryParse(id, out var intId))
 				throw new ArgumentException("Id should be integer number");
 
-			var product = await repository.FindAsync<DbClients.SqlModels.Product>(intId);
-			return new Product(product.Id.ToString(), product.Code, product.Name, product.Price, product.Photo);
+            var product = await repository.Products.FirstOrDefaultAsync(i => i.Id == intId);
+            if (product == null)
+                return null;
+
+            return new Product(product.Id.ToString(), product.Code, product.Name, product.Price, product.Photo);
 		}
 
 		public async Task UpdateAsync(Product item)
@@ -69,8 +72,11 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 			if (!int.TryParse(item.GetId(), out var intId))
 				throw new ArgumentException("Id should be integer number");
 
-			var product = await repository.FindAsync<DbClients.SqlModels.Product>(intId);
-			product.Code = item.GetCode();
+			var product = await repository.Products.FindAsync(intId);
+            if (product == null)
+                throw new ArgumentException("Couldn't find product");
+
+            product.Code = item.GetCode();
 			product.Name = item.GetName();
 			product.Price = item.GetPrice();
 			product.Photo = item.GetPhoto();

@@ -28,8 +28,14 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 		}
 
 		public async Task<ProductViewModel> GetAsync(string id)
-		{
-			var product = await repository.Products.FindAsync(id);
+        {
+            if (!int.TryParse(id, out var intId))
+                throw new ArgumentException("Id should be integer number");
+
+            var product = await repository.Products.FindAsync(intId);
+            if (product == null)
+                return null;
+
 			return new ProductViewModel(product.Id.ToString(), product.Code, product.Name, product.Price, product.Photo, product.LastUpdated);
 		}
 

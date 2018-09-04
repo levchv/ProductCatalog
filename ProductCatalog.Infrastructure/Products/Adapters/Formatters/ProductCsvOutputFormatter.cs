@@ -66,7 +66,7 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Formatters
             var searchParams = request.Query.ContainsKey("search") ? request.Query["search"].ToString() : null;
             if (!string.IsNullOrEmpty(searchParams))
             {
-                var regexSearch = Path.GetInvalidFileNameChars().ToString();
+                var regexSearch = new string(Path.GetInvalidFileNameChars());
                 var r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
                 var searchSafeParams = r.Replace(searchParams, "");
                 return $"Products({searchSafeParams}).csv";

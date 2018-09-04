@@ -47,7 +47,7 @@ namespace ProductCatalog.Api.Tests.Controllers
 			queriesHandlerMock.Setup(handler => handler.GetAllAsync()).ReturnsAsync(products);
 
 			var productController = new ProductsController(GetProductCommandsHandler(), queriesHandlerMock.Object, null);
-			var result = await productController.GetItemsAsync(search);
+			var result = await productController.GetItemsAsync(search, null);
 
 			Assert.IsInstanceOf<OkObjectResult>(result);
 			Assert.AreEqual(products, ((OkObjectResult)result).Value);
@@ -62,7 +62,7 @@ namespace ProductCatalog.Api.Tests.Controllers
 			queriesHandlerMock.Setup(handler => handler.SearchAsync(search)).ReturnsAsync(products);
 
 			var productController = new ProductsController(GetProductCommandsHandler(), queriesHandlerMock.Object, null);
-			var result = await productController.GetItemsAsync(search);
+			var result = await productController.GetItemsAsync(search, null);
 
 			Assert.IsInstanceOf<OkObjectResult>(result);
 			Assert.AreEqual(products, ((OkObjectResult)result).Value);
