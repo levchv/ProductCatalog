@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Infrastructu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Infrastructure.Tests", "ProductCatalog.Infrastructure.Tests\ProductCatalog.Infrastructure.Tests.csproj", "{852D909C-BADD-4E9C-8345-4328838BADFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.WebClient", "ProductCatalog.WebClient\ProductCatalog.WebClient.csproj", "{0BBCA852-7663-4D1F-A687-023AF227B643}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.WebClient", "ProductCatalog.WebClient\ProductCatalog.WebClient.csproj", "{0BBCA852-7663-4D1F-A687-023AF227B643}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
