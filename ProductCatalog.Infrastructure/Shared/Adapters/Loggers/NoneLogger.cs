@@ -8,5 +8,9 @@ namespace ProductCatalog.Infrastructure.Shared.Adapters.Loggers
 		public void LogException(Exception exp)
 		{
 		}
+
+		public void LogInfo(string info)
+		{
+		}
 	}
 }

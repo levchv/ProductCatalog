@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0"/>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="2.1.0"/>
+    <PackageReference Include="Hangfire" Version="1.6.20"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProductCatalog.Domain\ProductCatalog.Domain.csproj"/>

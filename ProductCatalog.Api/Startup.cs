@@ -18,6 +18,11 @@ using ProductCatalog.Domain.Products.Ports.Driving;
 using ProductCatalog.Infrastructure.Products.Adapters.Factories;
 using ProductCatalog.Infrastructure.Products.Adapters.Formatters;
 using Swashbuckle.AspNetCore.Swagger;
+using Hangfire;
+using Hangfire.SqlServer;
+using ProductCatalog.Api.Jobs;
+using ProductCatalog.Domain.Products.Ports.Driven;
+using ProductCatalog.Api.Core.Jobs;
 
 namespace ProductCatalog.Api
 {
@@ -33,6 +38,9 @@ namespace ProductCatalog.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+					var startHangfireServer = false;
+					var asyncBackgroundJobs = new List<IAsyncJob>();
+
             services.AddMvc(options => 
 			{
 				var formattersFactory = new ProductFormattersFactory();
@@ -45,6 +53,18 @@ namespace ProductCatalog.Api
 			var productReadOnlyRepositoryFactory = new ProductReadOnlyRepositoryFactory(configuration.ConnectionString);
 			var loggerFactory = new ProductCatalog.Infrastructure.Shared.Adapters.Loggers.LoggerFactory();
 
+			if (configuration.AutoMigrations)
+			{
+				startHangfireServer = true;
+				services.AddHangfire(config => config.UseSqlServerStorage(configuration.ConnectionString));
+
+				var productRepository = productRepositoryFactory.Get();
+				var logger = loggerFactory.Get();
+				var job = new ProductDatabaseMigrationJob(productRepository, logger);
+				asyncBackgroundJobs.Add(job);
+			}
+
+			services.AddScoped<IProductRepository>((s) => productRepositoryFactory.Get());
 			services.AddScoped<IProductCommandsHandler>((s) => new ProductCommandsHandler(productRepositoryFactory));
 			services.AddTransient<IProductQueriesHandler>((s) => new ProductQueriesHandler(productReadOnlyRepositoryFactory.Get()));
 			services.AddSingleton<ProductCatalog.Domain.Core.Ports.Shared.ILogger>((s) => loggerFactory.Get());
@@ -60,11 +80,19 @@ namespace ProductCatalog.Api
 			});
 			
     		services.AddApiVersioning(o => o.ApiVersionReader = new HeaderApiVersionReader("api-version"));
+				
+					services.Configure<HangfireConfiguration>(options => 
+					{
+						options.StartServer = startHangfireServer;
+						options.AsyncBackgroundJobs = asyncBackgroundJobs.ToArray();
+					});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+					var hangfireConfiguration = app.ApplicationServices.GetService<IOptions<HangfireConfiguration>>().Value;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -74,6 +102,22 @@ namespace ProductCatalog.Api
                 app.UseHsts();
             }
 
+						if (hangfireConfiguration.StartServer)
+						{
+							if (env.IsDevelopment())
+							{
+    						app.UseHangfireDashboard();
+							}
+        			app.UseHangfireServer();
+
+							if (hangfireConfiguration.AsyncBackgroundJobs?.Length > 0)
+							{
+								foreach(var job in hangfireConfiguration.AsyncBackgroundJobs)
+								{
+									BackgroundJob.Enqueue(() => job.RunAsync());
+								}
+							}
+						}
             app.UseHttpsRedirection();
             app.UseMvc();
 			

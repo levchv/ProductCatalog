@@ -82,5 +82,10 @@ namespace ProductCatalog.Infrastructure.Products.Adapters.Repositories
 			product.Photo = item.GetPhoto();
 			product.LastUpdated = DateTime.UtcNow;
 		}
+
+		public async Task MigrateAsync()
+		{
+			await repository.Database.MigrateAsync();
+		}
 	}
 }
