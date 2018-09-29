@@ -9,6 +9,11 @@ namespace ProductCatalog.Infrastructure.Products.DbClients
     {   
 		private string connectionString;
 
+		public ProductSqlDbClient(): this(@"Server=.\;")
+		{
+
+		}
+
 		public ProductSqlDbClient(string connectionString)
         {
 			this.connectionString = connectionString;

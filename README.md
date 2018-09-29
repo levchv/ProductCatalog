@@ -30,3 +30,13 @@ in appsettings.json file add (if not exists) or edit section "WebApiClient":
 
 please remember to replace "<url to web api (incuding version)>" with your Web Api url
 Example: "https://localhost:44380/api/v1/"
+
+
+#Develop notes
+
+#Product migration
+
+cd ProductCatalog.Infrastructure
+dotnet ef migrations add <name> -c ProductCatalog.Infrastructure.Products.DbClients.ProductSqlDbClient -o Products\DbClients\Migrations\Products
+
+
