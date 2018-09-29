@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Domain.Core.Ports.Repositories;
 using ProductCatalog.Infrastructure.Products.DbClients.SqlModels;
+using Toolbelt.ComponentModel.DataAnnotations;
 
 namespace ProductCatalog.Infrastructure.Products.DbClients
 {
@@ -28,5 +29,11 @@ namespace ProductCatalog.Infrastructure.Products.DbClients
 				optionsBuilder.UseSqlServer(connectionString);
             }
         }
+				
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.BuildIndexesFromAnnotations();
+    }
     }
 }

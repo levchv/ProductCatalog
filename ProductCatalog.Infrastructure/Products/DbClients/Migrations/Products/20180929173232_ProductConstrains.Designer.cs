@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductCatalog.Infrastructure.Products.DbClients;
 
 namespace ProductCatalog.Infrastructure.Products.DbClients.Migrations.Products
 {
     [DbContext(typeof(ProductSqlDbClient))]
-    partial class ProductSqlDbClientModelSnapshot : ModelSnapshot
+    [Migration("20180929173232_ProductConstrains")]
+    partial class ProductConstrains
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
